@@ -248,9 +248,15 @@ namespace luco
 		size_t line_number_width = std::to_string(line_number).size();
 		size_t index_width	 = std::to_string(index).size();
 
+#if __cpp_lib_format >= 202311L
+		err_str += std::format(std::runtime_format("{}"), "  {0:<{1}}\t|\t", ' ', line_number_width);
+		err_str += std::format(std::runtime_format("{}"), "{0:<{1}}", ' ', index_width);
+		err_str += std::format(std::runtime_format("{}"), "{0:>{1}}\n", '^', (index == 0 ? index : index - 1));
+#else
 		err_str += std::format("  {0:<{1}}\t|\t", ' ', line_number_width);
 		err_str += std::format("{0:<{1}}", ' ', index_width);
 		err_str += std::format("{0:>{1}}\n", '^', (index == 0 ? index : index - 1));
+#endif
 		err_str += "\x1b[0m";
 		return err_str;
 	}
