@@ -943,6 +943,8 @@ namespace luco
 				else if (this->is_end_of_token(data))
 				{
 					this->unregister_token(data);
+					luco_simple_types::strip_if_unqouted_string(data.keys.top().first, data.keys.top().second);
+
 					if (this->delimiter(data, '='))
 					{
 						this->prepare_for_next_token(data, luco_syntax::object);
@@ -977,8 +979,6 @@ namespace luco
 					}
 					luco::expected<std::reference_wrapper<luco::node>, error> ok =
 					    unexpected(error(error_type::none, "meow"));
-
-					luco_simple_types::strip_if_unqouted_string(data.keys.top().first, data.keys.top().second);
 
 					if (data.hierarchy.top().first == luco_syntax::opening_bracket ||
 					    data.hierarchy.top().first == luco_syntax::equal_sign)
