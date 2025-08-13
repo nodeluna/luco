@@ -907,7 +907,7 @@ namespace luco
 		private:
 			bool is_end_of_token(struct parsing_data& data) override
 			{
-				if (data.raw_value.second == luco_value_type::none || data.hierarchy.empty())
+				if ((data.raw_value.second == luco_value_type::none && not delimiter(data, '{')) || data.hierarchy.empty())
 				{
 					return false;
 				}
@@ -948,7 +948,7 @@ namespace luco
 						this->prepare_for_next_token(data, luco_syntax::object);
 						this->prepare_for_next_token(data, luco_syntax::equal_sign);
 					}
-					else if (this->delimiter(data, '{'))
+					else if (this->delimiter(data, '{') && data.raw_value.second != luco_value_type::none)
 					{
 						this->prepare_for_next_token(data, luco_syntax::object);
 						this->prepare_for_next_token(data, luco_syntax::opening_bracket);
@@ -957,6 +957,18 @@ namespace luco
 					{
 						this->prepare_for_next_token(data, luco_syntax::array);
 						this->prepare_for_next_token(data, luco_syntax::flush_value);
+					}
+					else if (this->delimiter(data, '{') && data.raw_value.second == luco_value_type::none)
+					{
+						this->prepare_for_next_token(data, luco_syntax::array);
+						auto ok = data.luco_objs.top()->insert(data.keys.top().first, luco::node(node_type::array));
+						if (not ok)
+						{
+							return unexpected(ok.error());
+						}
+						data.luco_objs.push(&ok.value().get());
+						this->register_token(data, luco_syntax::transient_bracket);
+						return true;
 					}
 					else
 					{
@@ -971,14 +983,30 @@ namespace luco
 					if (data.hierarchy.top().first == luco_syntax::opening_bracket ||
 					    data.hierarchy.top().first == luco_syntax::equal_sign)
 					{
-						ok = data.luco_objs.top()->insert(data.keys.top().first, luco::node(node_type::object));
+						if (data.luco_objs.top()->is_object())
+						{
+							ok = data.luco_objs.top()->insert(data.keys.top().first,
+											  luco::node(node_type::object));
+						}
+						else
+						{
+							ok = data.luco_objs.top()->push_back(luco::node(node_type::object));
+						}
 						data.keys.push(std::move(data.raw_value));
 						data.raw_value.first.clear();
 						data.raw_value.second = luco_value_type::none;
 					}
 					else if (data.hierarchy.top().first == luco_syntax::flush_value)
 					{
-						ok = data.luco_objs.top()->insert(data.keys.top().first, luco::node(node_type::array));
+						if (data.luco_objs.top()->is_object())
+						{
+							ok = data.luco_objs.top()->insert(data.keys.top().first,
+											  luco::node(node_type::array));
+						}
+						else
+						{
+							ok = data.luco_objs.top()->push_back(luco::node(node_type::array));
+						}
 					}
 
 					if (not ok)
@@ -1205,7 +1233,6 @@ namespace luco
 
 			luco::expected<bool, luco::error> handle_token(struct parsing_data& data) override
 			{
-
 				if (this->is_token(data))
 				{
 					this->prepare_for_next_token(data, luco_syntax::none);
@@ -1248,13 +1275,7 @@ namespace luco
 							}
 						}
 
-						auto ok = data.luco_objs.top()->push_back(luco::node(node_type::array));
-						if (not ok)
-						{
-							return unexpected(ok.error());
-						}
-						this->register_token(data, luco_syntax::array);
-						data.luco_objs.push(&ok.value().get());
+						this->register_token(data, luco_syntax::transient_bracket);
 						return true;
 					}
 					else
@@ -1362,13 +1383,13 @@ namespace luco
 				assert(data.hierarchy.top().first == luco_syntax::object ||
 				       data.hierarchy.top().first == luco_syntax::array);
 
+				this->unregister_token(data);
+
 				if (data.hierarchy.top().first == luco_syntax::object)
 				{
 					assert(not data.keys.empty());
 					data.keys.pop();
 				}
-
-				this->unregister_token(data);
 
 				assert(not data.luco_objs.empty());
 				data.luco_objs.pop();
