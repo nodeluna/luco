@@ -1,0 +1,40 @@
+# this is a config file for Poxy - a Doxygen + m.css front-end written in Python.
+# https://github.com/marzer/poxy
+#
+# config reference: https://github.com/marzer/poxy/wiki/Configuration-options
+
+name          = 'luco'
+author        = 'nodeluna'
+description   = 'an easy to use header only JSON library for C++20'
+cpp           = 20
+github        = 'nodeluna/luco'
+license       = ['Apache Version 2.0', 'https://github.com/nodeluna/luco/LICENSE']
+show_includes = true
+changelog     = false
+navbar        = ['namespaces', 'annotated', 'concepts']
+theme         = 'dark'
+main_page     = true
+
+
+[warnings]
+enabled         = true
+treat_as_errors = false
+undocumented    = true
+
+[sources]
+paths    = ['../include', '../mod', '../']
+patterns = ['*.hpp', '*.cpp', '*.md']
+
+
+[autolinks]
+'node?'             = 'classluco_1_1node.html'
+'luco?'            = 'namespaceluco.html'
+'luco::node?'      = 'classluco_1_1node.html'
+'luco::object?'    = 'classluco_1_1object.html'
+'luco::array?'     = 'classluco_1_1array.html'
+'luco::value?'     = 'classluco_1_1value.html'
+'luco::error?'     = 'classluco_1_1error.html'
+'luco::expected?'  = 'classluco_1_1expected.html'
+'expected?'         = 'classluco_1_1expected.html'
+'luco::monostate?' = 'structluco_1_1expected.html'
+'luco::null_type?' = 'classluco_1_1null__type.html'
