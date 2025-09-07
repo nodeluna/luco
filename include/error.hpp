@@ -62,7 +62,7 @@ namespace luco
 			 * @param err holds the value of luco::error_type
 			 * @param message the string message of the error
 			 */
-			error(error_type err, const std::string& message) noexcept;
+			inline error(error_type err, const std::string& message) noexcept;
 
 			/**
 			 * @brief constructor
@@ -72,51 +72,51 @@ namespace luco
 			 * @tparam args_t the types of arguments for std::format()
 			 */
 			template<typename... args_t>
-			error(error_type err, std::format_string<args_t...> fmt, args_t&&... args) noexcept;
+			inline error(error_type err, std::format_string<args_t...> fmt, args_t&&... args) noexcept;
 
 			/**
 			 * @brief get the string message of the error
 			 * @return get the string message of the error
 			 */
-			const char*	   what() const noexcept;
+			inline const char*	  what() const noexcept;
 
 			/**
 			 * @brief get the string message of the error
 			 * @return get the string message of the error
 			 */
-			const std::string& message() const noexcept;
+			inline const std::string& message() const noexcept;
 
 			/**
 			 * @brief get the luco::error_type of the error
 			 * @return get the luco::error_type of the error
 			 */
-			error_type	   value() const noexcept;
+			inline error_type	  value() const noexcept;
 	};
 }
 
 namespace luco
 {
-	error::error(error_type err, const std::string& message) noexcept : err_type(err), msg(message)
+	inline error::error(error_type err, const std::string& message) noexcept : err_type(err), msg(message)
 	{
 	}
 
 	template<typename... args_t>
-	error::error(error_type err, std::format_string<args_t...> fmt, args_t&&... args) noexcept
+	inline error::error(error_type err, std::format_string<args_t...> fmt, args_t&&... args) noexcept
 	    : err_type(err), msg(std::format(fmt, std::forward<args_t>(args)...))
 	{
 	}
 
-	const char* error::what() const noexcept
+	inline const char* error::what() const noexcept
 	{
 		return msg.c_str();
 	}
 
-	const std::string& error::message() const noexcept
+	inline const std::string& error::message() const noexcept
 	{
 		return msg;
 	}
 
-	error_type error::value() const noexcept
+	inline error_type error::value() const noexcept
 	{
 		return err_type;
 	}

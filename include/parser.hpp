@@ -81,7 +81,7 @@ namespace luco
 		flush_value,
 	};
 
-	std::string syntax_reflect(enum luco_syntax l)
+	inline std::string syntax_reflect(enum luco_syntax l)
 	{
 		switch (l)
 		{
@@ -136,7 +136,7 @@ namespace luco
 		return "";
 	}
 
-	std::string reflect_stack_syntax(std::stack<std::pair<luco_syntax, std::pair<size_t, size_t>>> hierarchy)
+	inline std::string reflect_stack_syntax(std::stack<std::pair<luco_syntax, std::pair<size_t, size_t>>> hierarchy)
 	{
 		if (hierarchy.empty())
 		{
@@ -162,30 +162,30 @@ namespace luco
 			std::multimap<luco_syntax, char> expected      = {};
 			std::set<char>			 special_chars = {'{', '=', '}', '"', '\'', '\\'};
 
-			virtual bool			 is_end_of_token(struct parsing_data& _);
-			bool				 handle_is(struct parsing_data&, const std::set<luco_syntax>&);
-			bool				 handle_not(struct parsing_data&, const std::set<char>&);
-			bool				 handle_expected(struct parsing_data&, const std::multimap<luco_syntax, char>&);
+			inline virtual bool		 is_end_of_token(struct parsing_data& _);
+			inline bool			 handle_is(struct parsing_data&, const std::set<luco_syntax>&);
+			inline bool			 handle_not(struct parsing_data&, const std::set<char>&);
+			inline bool			 handle_expected(struct parsing_data&, const std::multimap<luco_syntax, char>&);
 
 		public:
-			token()
+			inline token()
 			{
 			}
 
-			virtual luco::expected<bool, luco::error> handle_token(struct parsing_data& _);
-			virtual bool				  is_token(struct parsing_data& _);
-			virtual void				  prepare_for_next_token(struct parsing_data& _, luco_syntax __);
-			inline static bool			  is_escaped(struct parsing_data& data, char ch);
-			bool					  is_comment(const struct parsing_data& data);
-			void					  register_token(struct parsing_data& data, luco_syntax token_type);
-			bool					  is_registered_token(const struct parsing_data&, luco_syntax token_type);
-			void					  unregister_token(struct parsing_data& data);
-			inline static bool			  is_empty(const char ch);
-			inline static bool			  is_newline(const char ch);
-			inline static bool			  is_empty_newline(const char ch);
-			inline static bool			  delimiter(struct parsing_data& data, char ch);
+			inline virtual luco::expected<bool, luco::error> handle_token(struct parsing_data& _);
+			inline virtual bool				 is_token(struct parsing_data& _);
+			inline virtual void				 prepare_for_next_token(struct parsing_data& _, luco_syntax __);
+			inline static bool				 is_escaped(struct parsing_data& data, char ch);
+			inline bool					 is_comment(const struct parsing_data& data);
+			inline void					 register_token(struct parsing_data& data, luco_syntax token_type);
+			inline bool	   is_registered_token(const struct parsing_data&, luco_syntax token_type);
+			inline void	   unregister_token(struct parsing_data& data);
+			inline static bool is_empty(const char ch);
+			inline static bool is_newline(const char ch);
+			inline static bool is_empty_newline(const char ch);
+			inline static bool delimiter(struct parsing_data& data, char ch);
 
-			virtual ~token()
+			inline virtual ~token()
 			{
 			}
 	};
@@ -226,7 +226,7 @@ namespace luco
 			std::stack<std::pair<luco_syntax, std::pair<size_t, size_t>>> hierarchy;
 	};
 
-	std::string error_location(const struct parsing_data& data, std::optional<std::pair<size_t, size_t>> location = std::nullopt)
+	inline std::string error_location(const struct parsing_data& data, std::optional<std::pair<size_t, size_t>> location = std::nullopt)
 	{
 		size_t line_number = 1;
 		size_t index	   = 0;
@@ -261,7 +261,7 @@ namespace luco
 		return err_str;
 	}
 
-	std::string dump_data(const parsing_data& data)
+	inline std::string dump_data(const parsing_data& data)
 	{
 		std::string dump = "[data dump]\n";
 
@@ -288,7 +288,7 @@ namespace luco
 		return dump;
 	}
 
-	bool token::handle_is(struct parsing_data& data, const std::set<luco_syntax>& is_tokens)
+	inline bool token::handle_is(struct parsing_data& data, const std::set<luco_syntax>& is_tokens)
 	{
 		if (data.hierarchy.empty())
 		{
@@ -306,7 +306,7 @@ namespace luco
 		return false;
 	}
 
-	bool token::handle_not(struct parsing_data& data, const std::set<char>& __not)
+	inline bool token::handle_not(struct parsing_data& data, const std::set<char>& __not)
 	{
 		for (const auto& ch : __not)
 		{
@@ -334,7 +334,7 @@ namespace luco
 		return true;
 	}
 
-	bool token::handle_expected(struct parsing_data& data, const std::multimap<luco_syntax, char>& expected_tokens)
+	inline bool token::handle_expected(struct parsing_data& data, const std::multimap<luco_syntax, char>& expected_tokens)
 	{
 		for (const auto& expect : expected_tokens)
 		{
@@ -361,7 +361,7 @@ namespace luco
 		return false;
 	}
 
-	bool token::delimiter(struct parsing_data& data, char ch)
+	inline bool token::delimiter(struct parsing_data& data, char ch)
 	{
 		if (data.line[data.i] == ch && not token::is_escaped(data, ch))
 		{
@@ -370,7 +370,7 @@ namespace luco
 		return false;
 	}
 
-	bool token::is_escaped(struct parsing_data& data, char ch)
+	inline bool token::is_escaped(struct parsing_data& data, char ch)
 	{
 		auto& [escape_char_pos, append_escape_char, escape_char] = data.escaped_special_char;
 
@@ -421,7 +421,7 @@ namespace luco
 		}
 	}
 
-	bool token::is_empty(const char ch)
+	inline bool token::is_empty(const char ch)
 	{
 		if (ch == ' ' || ch == '\t')
 		{
@@ -430,7 +430,7 @@ namespace luco
 		return false;
 	}
 
-	bool token::is_newline(const char ch)
+	inline bool token::is_newline(const char ch)
 	{
 		if (ch == '\n')
 		{
@@ -439,7 +439,7 @@ namespace luco
 		return false;
 	}
 
-	bool token::is_empty_newline(const char ch)
+	inline bool token::is_empty_newline(const char ch)
 	{
 		if (ch == ' ' || ch == '\t' || ch == '\n')
 		{
@@ -448,26 +448,26 @@ namespace luco
 		return false;
 	}
 
-	luco::expected<bool, luco::error> token::handle_token(struct parsing_data&)
+	inline luco::expected<bool, luco::error> token::handle_token(struct parsing_data&)
 	{
 		return false;
 	}
 
-	bool token::is_token(struct parsing_data&)
+	inline bool token::is_token(struct parsing_data&)
 	{
 		return false;
 	}
 
-	bool token::is_end_of_token(struct parsing_data&)
+	inline bool token::is_end_of_token(struct parsing_data&)
 	{
 		return false;
 	}
 
-	void token::prepare_for_next_token(struct parsing_data&, luco_syntax)
+	inline void token::prepare_for_next_token(struct parsing_data&, luco_syntax)
 	{
 	}
 
-	bool token::is_comment(const struct parsing_data& data)
+	inline bool token::is_comment(const struct parsing_data& data)
 	{
 		if (not data.hierarchy.empty() && data.hierarchy.top().first == luco_syntax::comment)
 		{
@@ -476,12 +476,12 @@ namespace luco
 		return false;
 	}
 
-	void token::register_token(struct parsing_data& data, luco_syntax token_type)
+	inline void token::register_token(struct parsing_data& data, luco_syntax token_type)
 	{
 		data.hierarchy.push(std::make_pair(token_type, std::make_pair(data.line_number, data.i)));
 	}
 
-	bool token::is_registered_token(const struct parsing_data& data, luco_syntax token_type)
+	inline bool token::is_registered_token(const struct parsing_data& data, luco_syntax token_type)
 	{
 		if (not data.hierarchy.empty() && data.hierarchy.top().first == token_type)
 		{
@@ -490,7 +490,7 @@ namespace luco
 		return false;
 	}
 
-	void token::unregister_token(struct parsing_data& data)
+	inline void token::unregister_token(struct parsing_data& data)
 	{
 		assert(not data.hierarchy.empty() && "internal parsing error in token::unregister_token");
 		data.hierarchy.pop();
@@ -510,7 +510,7 @@ namespace luco
 				_int
 			};
 
-			static std::variant<std::string, bool, double, int64_t, null_type> get_type(const std::string& raw_value)
+			inline static std::variant<std::string, bool, double, int64_t, null_type> get_type(const std::string& raw_value)
 			{
 				if (luco_simple_types::is_null(raw_value))
 				{
@@ -550,7 +550,7 @@ namespace luco
 				}
 			}
 
-			static number_types is_number(const std::string& data)
+			inline static number_types is_number(const std::string& data)
 			{
 				if (data.empty())
 				{
@@ -588,7 +588,7 @@ namespace luco
 				}
 			}
 
-			static boolean_types is_boolean(const std::string& data)
+			inline static boolean_types is_boolean(const std::string& data)
 			{
 				if (data == "on" || data == "true")
 				{
@@ -604,7 +604,7 @@ namespace luco
 				}
 			}
 
-			static bool is_null(const std::string& data)
+			inline static bool is_null(const std::string& data)
 			{
 				if (data == "null")
 				{
@@ -613,7 +613,7 @@ namespace luco
 				return false;
 			}
 
-			static bool is_quoted_string(const luco_value_type& key_value_type)
+			inline static bool is_quoted_string(const luco_value_type& key_value_type)
 			{
 				if (key_value_type == luco_value_type::qouted_string_2)
 				{
@@ -626,7 +626,7 @@ namespace luco
 				return false;
 			}
 
-			static void strip_if_unqouted_string(std::string& data, const luco_value_type& key_value_type)
+			inline static void strip_if_unqouted_string(std::string& data, const luco_value_type& key_value_type)
 			{
 				if (key_value_type != luco_value_type::unqouted_string || data.empty() || not token::is_empty(data.back()))
 				{
@@ -652,7 +652,7 @@ namespace luco
 				}
 			}
 
-			static bool append_string(struct parsing_data& data, luco_value_type& key_value_type, char ch)
+			inline static bool append_string(struct parsing_data& data, luco_value_type& key_value_type, char ch)
 			{
 				// TODO: use delimiter method
 				if (token::delimiter(data, '{') || token::delimiter(data, '}'))
@@ -677,7 +677,7 @@ namespace luco
 				}
 			}
 
-			static bool expected_newline(luco_value_type& key_value_type)
+			inline static bool expected_multi_line_string(luco_value_type& key_value_type)
 			{
 				if (key_value_type == luco_value_type::escaped_string_newline_qouted_1 ||
 				    key_value_type == luco_value_type::escaped_string_newline_qouted_2 ||
@@ -691,7 +691,7 @@ namespace luco
 				}
 			}
 
-			static bool end_of_string(luco_value_type& key_value_type)
+			inline static bool end_of_string(luco_value_type& key_value_type)
 			{
 				if (key_value_type == luco_value_type::end_string_1 || key_value_type == luco_value_type::end_string_2 ||
 				    key_value_type == luco_value_type::end_string_unqouted)
@@ -701,10 +701,10 @@ namespace luco
 				return false;
 			}
 
-			static bool handle_empty_in_string(struct parsing_data& data, luco_value_type& key_value_type, char ch)
+			inline static bool handle_empty_in_string(struct parsing_data& data, luco_value_type& key_value_type, char ch)
 			{
 				if (token::is_empty_newline(ch) &&
-				    (key_value_type == luco_value_type::none || expected_newline(key_value_type)))
+				    (key_value_type == luco_value_type::none || expected_multi_line_string(key_value_type)))
 				{
 					return false;
 				}
@@ -818,7 +818,7 @@ namespace luco
 		private:
 			unsigned long brackets_count = 0;
 
-			bool	      is_end_of_token(struct parsing_data& data) override
+			inline bool   is_end_of_token(struct parsing_data& data) override
 			{
 				if (not data.hierarchy.empty() && data.hierarchy.top().first == luco_syntax::comment &&
 				    this->handle_expected(data, this->expected))
@@ -835,16 +835,16 @@ namespace luco
 			}
 
 		public:
-			comment()
+			inline comment()
 			{
 				this->expected.insert(std::make_pair(luco_syntax::newline, '\n'));
 			}
 
-			~comment()
+			inline ~comment()
 			{
 			}
 
-			luco::expected<bool, luco::error> handle_token(struct parsing_data& data) override
+			inline luco::expected<bool, luco::error> handle_token(struct parsing_data& data) override
 			{
 				if (this->is_token(data))
 				{
@@ -890,7 +890,7 @@ namespace luco
 				}
 			}
 
-			bool is_token(struct parsing_data& data) override
+			inline bool is_token(struct parsing_data& data) override
 			{
 				if (this->delimiter(data, '#'))
 				{
@@ -905,7 +905,7 @@ namespace luco
 
 	class opening_bracket : public token {
 		private:
-			bool is_end_of_token(struct parsing_data& data) override
+			inline bool is_end_of_token(struct parsing_data& data) override
 			{
 				if ((data.raw_value.second == luco_value_type::none && not delimiter(data, '{')) || data.hierarchy.empty())
 				{
@@ -920,7 +920,7 @@ namespace luco
 			}
 
 		public:
-			opening_bracket()
+			inline opening_bracket()
 			{
 				this->is.insert(luco_syntax::opening_bracket);
 
@@ -929,11 +929,11 @@ namespace luco
 				this->expected.insert(std::make_pair(luco_syntax::array, '\n'));
 			}
 
-			~opening_bracket()
+			inline ~opening_bracket()
 			{
 			}
 
-			luco::expected<bool, luco::error> handle_token(struct parsing_data& data) override
+			inline luco::expected<bool, luco::error> handle_token(struct parsing_data& data) override
 			{
 				if (this->is_token(data))
 				{
@@ -1044,12 +1044,12 @@ namespace luco
 				}
 			}
 
-			void prepare_for_next_token(struct parsing_data& data, luco_syntax type) override
+			inline void prepare_for_next_token(struct parsing_data& data, luco_syntax type) override
 			{
 				this->register_token(data, type);
 			}
 
-			bool is_token(struct parsing_data& data) override
+			inline bool is_token(struct parsing_data& data) override
 			{
 				assert(not data.hierarchy.empty());
 
@@ -1066,7 +1066,7 @@ namespace luco
 
 	class luco_key : public token {
 		private:
-			bool is_end_of_token(struct parsing_data& data) override
+			inline bool is_end_of_token(struct parsing_data& data) override
 			{
 				if (not data.hierarchy.empty() && data.hierarchy.top().first == luco_syntax::key &&
 				    this->handle_expected(data, this->expected))
@@ -1078,7 +1078,7 @@ namespace luco
 			}
 
 		public:
-			luco_key()
+			inline luco_key()
 			{
 				this->is.insert(luco_syntax::object);
 
@@ -1092,18 +1092,19 @@ namespace luco
 				this->expected.insert(std::make_pair(luco_syntax::opening_bracket, '{'));
 			}
 
-			~luco_key()
+			inline ~luco_key()
 			{
 			}
 
-			luco::expected<bool, luco::error> handle_token(struct parsing_data& data) override
+			inline luco::expected<bool, luco::error> handle_token(struct parsing_data& data) override
 			{
 				if (this->is_token(data))
 				{
 					this->register_token(data, luco_syntax::key);
 					data.keys.push(std::make_pair("", luco_value_type::none));
 				}
-				else if (this->is_end_of_token(data) && not luco_simple_types::expected_newline(data.keys.top().second))
+				else if (this->is_end_of_token(data) &&
+					 not luco_simple_types::expected_multi_line_string(data.keys.top().second))
 				{
 					this->unregister_token(data);
 					this->prepare_for_next_token(data, this->delimiter(data, '=') ? luco_syntax::equal_sign
@@ -1126,7 +1127,8 @@ namespace luco
 					{
 						return false;
 					}
-					// else if (luco_simple_types::unexpected_newline(data.keys.top().second, data.line[data.i]))
+					// else if (luco_simple_types::unexpected_multi_line_string(data.keys.top().second,
+					// data.line[data.i]))
 					// {
 					// 	return unexpected(error(error_type::parsing_error, "unexpected newline: key"));
 					// }
@@ -1137,12 +1139,12 @@ namespace luco
 				}
 			}
 
-			void prepare_for_next_token(struct parsing_data& data, luco_syntax token_type) override
+			inline void prepare_for_next_token(struct parsing_data& data, luco_syntax token_type) override
 			{
 				this->register_token(data, token_type);
 			}
 
-			bool is_token(struct parsing_data& data) override
+			inline bool is_token(struct parsing_data& data) override
 			{
 				assert(not data.hierarchy.empty());
 
@@ -1159,7 +1161,7 @@ namespace luco
 
 	class luco_value : public token {
 		private:
-			bool is_end_of_token(struct parsing_data& data) override
+			inline bool is_end_of_token(struct parsing_data& data) override
 			{
 				if (not data.hierarchy.empty() && data.hierarchy.top().first == luco_syntax::value &&
 				    (this->handle_expected(data, this->expected) && not delimiter(data, '\\')))
@@ -1175,7 +1177,7 @@ namespace luco
 				return false;
 			}
 
-			luco::expected<bool, luco::error> insert_value(struct parsing_data& data)
+			inline luco::expected<bool, luco::error> insert_value(struct parsing_data& data)
 			{
 				luco_simple_types::strip_if_unqouted_string(data.raw_value.first, data.raw_value.second);
 
@@ -1213,7 +1215,7 @@ namespace luco
 			}
 
 		public:
-			luco_value()
+			inline luco_value()
 			{
 				this->is.insert(luco_syntax::equal_sign);
 				this->is.insert(luco_syntax::array);
@@ -1227,18 +1229,19 @@ namespace luco
 				// this->expected.insert(std::make_pair(luco_syntax::flush_value, '\n'));
 			}
 
-			~luco_value()
+			inline ~luco_value()
 			{
 			}
 
-			luco::expected<bool, luco::error> handle_token(struct parsing_data& data) override
+			inline luco::expected<bool, luco::error> handle_token(struct parsing_data& data) override
 			{
 				if (this->is_token(data))
 				{
 					this->prepare_for_next_token(data, luco_syntax::none);
 					this->register_token(data, luco_syntax::value);
 				}
-				else if (this->is_end_of_token(data) && not luco_simple_types::expected_newline(data.raw_value.second))
+				else if (this->is_end_of_token(data) &&
+					 not luco_simple_types::expected_multi_line_string(data.raw_value.second))
 				{
 					auto ok = this->insert_value(data);
 					this->unregister_token(data);
@@ -1289,7 +1292,7 @@ namespace luco
 				}
 			}
 
-			void prepare_for_next_token(struct parsing_data& data, luco_syntax) override
+			inline void prepare_for_next_token(struct parsing_data& data, luco_syntax) override
 			{
 				if (data.hierarchy.top().first == luco_syntax::equal_sign ||
 				    data.hierarchy.top().first == luco_syntax::flush_value)
@@ -1298,7 +1301,7 @@ namespace luco
 				}
 			}
 
-			bool is_token(struct parsing_data& data) override
+			inline bool is_token(struct parsing_data& data) override
 			{
 				assert(not data.hierarchy.empty());
 
@@ -1315,7 +1318,7 @@ namespace luco
 
 	class closing_bracket : public token {
 		public:
-			closing_bracket()
+			inline closing_bracket()
 			{
 				this->expected.insert(std::make_pair(luco_syntax::closing_bracket, '}'));
 				this->expected.insert(std::make_pair(luco_syntax::transient_bracket, '}'));
@@ -1324,11 +1327,11 @@ namespace luco
 				this->is.insert(luco_syntax::array);
 			}
 
-			~closing_bracket()
+			inline ~closing_bracket()
 			{
 			}
 
-			luco::expected<bool, luco::error> handle_token(struct parsing_data& data) override
+			inline luco::expected<bool, luco::error> handle_token(struct parsing_data& data) override
 			{
 				if (this->is_token(data))
 				{
@@ -1378,7 +1381,7 @@ namespace luco
 				}
 			}
 
-			void prepare_for_next_token(struct parsing_data& data, luco_syntax) override
+			inline void prepare_for_next_token(struct parsing_data& data, luco_syntax) override
 			{
 				assert(data.hierarchy.top().first == luco_syntax::object ||
 				       data.hierarchy.top().first == luco_syntax::array);
@@ -1395,7 +1398,7 @@ namespace luco
 				data.luco_objs.pop();
 			}
 
-			bool is_token(struct parsing_data& data) override
+			inline bool is_token(struct parsing_data& data) override
 			{
 				assert(not data.hierarchy.empty());
 
@@ -1418,7 +1421,7 @@ namespace luco
 			class comment	      comment;
 	};
 
-	luco::expected<bool, luco::error> syntax_error(struct parsing_data& data, const struct syntax&)
+	inline luco::expected<bool, luco::error> syntax_error(struct parsing_data& data, const struct syntax&)
 	{
 		if (token::is_empty_newline(data.line[data.i]))
 		{
@@ -1457,7 +1460,7 @@ namespace luco
 						"{} expected '=' or '{{' after [key] reaching end-of-string but found '{}'",
 						error_location(data), data.line[data.i]));
 		}
-		else if (not data.keys.empty() && luco_simple_types::end_of_string(data.raw_value.second) && not data.hierarchy.empty() &&
+		else if (luco_simple_types::end_of_string(data.raw_value.second) && not data.hierarchy.empty() &&
 			 data.hierarchy.top().first == luco_syntax::value)
 		{
 			return unexpected(error(luco::error_type::parsing_error,
@@ -1481,7 +1484,7 @@ namespace luco
 		}
 	}
 
-	bool parser::done_or_not_ok(const expected<bool, error>& ok)
+	inline bool parser::done_or_not_ok(const expected<bool, error>& ok)
 	{
 		if ((ok && ok.value()) || not ok)
 		{
@@ -1493,7 +1496,7 @@ namespace luco
 		}
 	}
 
-	expected<monostate, error> parser::return_error_if_not_ok(const expected<bool, error>& ok)
+	inline expected<monostate, error> parser::return_error_if_not_ok(const expected<bool, error>& ok)
 	{
 		if (not ok)
 		{
@@ -1502,7 +1505,7 @@ namespace luco
 		return monostate();
 	}
 
-	expected<monostate, error> parser::parsing(struct parsing_data& data, struct syntax& syntax)
+	inline expected<monostate, error> parser::parsing(struct parsing_data& data, struct syntax& syntax)
 	{
 		expected<bool, error> ok;
 
@@ -1536,7 +1539,7 @@ namespace luco
 		}
 	}
 
-	luco::node parser::parse(const std::filesystem::path& path)
+	inline luco::node parser::parse(const std::filesystem::path& path)
 	{
 		expected<luco::node, error> ok = luco::parser::try_parse(path);
 		if (not ok)
@@ -1547,7 +1550,7 @@ namespace luco
 		return ok.value();
 	}
 
-	luco::node parser::parse(const char* raw_json)
+	inline luco::node parser::parse(const char* raw_json)
 	{
 		expected<luco::node, error> ok = luco::parser::try_parse(raw_json);
 		if (not ok)
@@ -1558,7 +1561,7 @@ namespace luco
 		return ok.value();
 	}
 
-	luco::node parser::parse(const std::string& raw_json)
+	inline luco::node parser::parse(const std::string& raw_json)
 	{
 		expected<luco::node, error> ok = luco::parser::try_parse(raw_json);
 		if (not ok)
@@ -1569,7 +1572,7 @@ namespace luco
 		return ok.value();
 	}
 
-	expected<luco::node, error> parser::try_parse(const std::filesystem::path& path) noexcept
+	inline expected<luco::node, error> parser::try_parse(const std::filesystem::path& path) noexcept
 	{
 		luco::node		       luco_data = luco::node(node_type::object);
 
@@ -1622,7 +1625,7 @@ namespace luco
 		return luco_data;
 	}
 
-	expected<luco::node, error> parser::try_parse(const std::string& raw_json) noexcept
+	inline expected<luco::node, error> parser::try_parse(const std::string& raw_json) noexcept
 	{
 		luco::node	    luco_data = luco::node(node_type::object);
 
@@ -1669,7 +1672,7 @@ namespace luco
 		return luco_data;
 	}
 
-	expected<luco::node, error> parser::try_parse(const char* raw_json) noexcept
+	inline expected<luco::node, error> parser::try_parse(const char* raw_json) noexcept
 	{
 		assert(raw_json != NULL);
 		std::string string_json(raw_json);

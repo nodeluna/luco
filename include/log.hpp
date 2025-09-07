@@ -34,9 +34,9 @@
 namespace luco
 {
 #ifdef VERBOSE_LOGS
-	std::string log(const std::string& msg, std::source_location location = std::source_location::current())
+	inline std::string log(const std::string& msg, std::source_location location = std::source_location::current())
 #else
-	std::string log(const std::string&, std::source_location __ = std::source_location::current())
+	inline std::string log(const std::string&, std::source_location __ = std::source_location::current())
 #endif
 	{
 #ifdef VERBOSE_LOGS
@@ -60,9 +60,9 @@ namespace luco
 	}
 
 #ifdef VERBOSE_LOGS
-	void print_log(const std::string& msg, std::source_location location = std::source_location::current())
+	inline void print_log(const std::string& msg, std::source_location location = std::source_location::current())
 #else
-	void print_log(const std::string&, std::source_location __ = std::source_location::current())
+	inline void print_log(const std::string&, std::source_location __ = std::source_location::current())
 #endif
 	{
 #ifdef VERBOSE_LOGS
