@@ -21,6 +21,7 @@ export namespace luco
 	using luco::node;
 	using luco::null;
 	using luco::null_type;
+	using luco::node_type;
 	using luco::object;
 	using luco::object_pairs;
 	using luco::parser;
