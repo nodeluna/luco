@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <format>
 #include <algorithm>
 #include <any>
 #include <cstddef>
@@ -560,19 +561,19 @@ namespace luco
 				bool number	 = std::all_of(data.begin(), data.end(),
 							       [&](char c)
 							       {
-								       if (std::isdigit(c))
-								       {
-									       return true;
-								       }
-								       else if (c == '.' && not has_decimal)
-								       {
-									       has_decimal = true;
-									       return true;
-								       }
-								       else
-								       {
-									       return false;
-								       }
+								  if (std::isdigit(c))
+								  {
+									  return true;
+								  }
+								  else if (c == '.' && not has_decimal)
+								  {
+									  has_decimal = true;
+									  return true;
+								  }
+								  else
+								  {
+									  return false;
+								  }
 							       });
 				if (not number)
 				{

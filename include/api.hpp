@@ -35,7 +35,7 @@
  */
 namespace luco
 {
-	void __print(const std::string& data)
+	inline void __print(const std::string& data)
 	{
 		std::cout << data;
 	}
@@ -181,7 +181,7 @@ namespace luco
 			 * @tparam is_allowed_value_type the type of the luco value
 			 */
 			template<is_allowed_value_type val_type>
-			value(const val_type& val) noexcept
+			inline value(const val_type& val) noexcept
 			{
 				this->set_state(val);
 			}
@@ -190,7 +190,7 @@ namespace luco
 			 * @brief copy constructor for luco::value
 			 * @param other luco::value to be copied
 			 */
-			value(const value& other) : _value(other._value), _type(other._type)
+			inline value(const value& other) : _value(other._value), _type(other._type)
 			{
 			}
 
@@ -199,7 +199,7 @@ namespace luco
 			 * @param other luco::value to be copied
 			 * @return the address of the modified luco::value
 			 */
-			value& operator=(const value& other)
+			inline value& operator=(const value& other)
 			{
 				_value = other._value;
 				_type  = other._type;
@@ -210,7 +210,7 @@ namespace luco
 			 * @brief move constructor for luco::value
 			 * @param other luco::value to be moved
 			 */
-			value(const value&& other) : _value(std::move(other._value)), _type(other._type)
+			inline value(const value&& other) : _value(std::move(other._value)), _type(other._type)
 			{
 			}
 
@@ -219,7 +219,7 @@ namespace luco
 			 * @param other luco::value to be moved
 			 * @return the address of the modified luco::value
 			 */
-			value& operator=(const value&& other)
+			inline value& operator=(const value&& other)
 			{
 				_value = std::move(other._value);
 				_type  = other._type;
@@ -229,7 +229,7 @@ namespace luco
 			/**
 			 * @brief constructor which sets an empty luco::value
 			 */
-			value() noexcept : _value(monostate()), _type(value_type::none)
+			inline value() noexcept : _value(monostate()), _type(value_type::none)
 			{
 			}
 
@@ -237,7 +237,7 @@ namespace luco
 			 * @brief gets the type of the stored luco value
 			 * @return luco::value_type of the stored luco value
 			 */
-			luco::value_type type() const noexcept
+			inline luco::value_type type() const noexcept
 			{
 				return _type;
 			}
@@ -248,7 +248,7 @@ namespace luco
 			 * @tparam is_allowed_value_type the type of the luco value
 			 */
 			template<is_allowed_value_type val_type>
-			void set_value_type(const val_type& val) noexcept
+			inline void set_value_type(const val_type& val) noexcept
 			{
 				this->set_state(val);
 			}
@@ -259,7 +259,7 @@ namespace luco
 			 * @param type luco type (luco::value_type) to be set
 			 * @return luco::monostate or luco::error if the value wasn't set (wrong type was provided)
 			 */
-			expected<monostate, error> set_value_type(const std::string& val, value_type type)
+			inline expected<monostate, error> set_value_type(const std::string& val, value_type type)
 			{
 				return this->set_state(val, type);
 			}
@@ -268,7 +268,7 @@ namespace luco
 			 * @brief checks if luco::value is holding luco string (std::string)
 			 * @return true if it does
 			 */
-			bool is_string() const noexcept
+			inline bool is_string() const noexcept
 			{
 				return std::holds_alternative<std::string>(_value);
 			}
@@ -277,7 +277,7 @@ namespace luco
 			 * @brief checks if luco::value is holding luco number (double or int64_t)
 			 * @return true if it does
 			 */
-			bool is_number() const noexcept
+			inline bool is_number() const noexcept
 			{
 				return std::holds_alternative<double>(_value) || std::holds_alternative<int64_t>(_value);
 			}
@@ -286,7 +286,7 @@ namespace luco
 			 * @brief checks if luco::value is holding luco number (double)
 			 * @return true if it does
 			 */
-			bool is_double() const noexcept
+			inline bool is_double() const noexcept
 			{
 				return std::holds_alternative<double>(_value);
 			}
@@ -295,7 +295,7 @@ namespace luco
 			 * @brief checks if luco::value is holding luco number (int64_t)
 			 * @return true if it does
 			 */
-			bool is_integer() const noexcept
+			inline bool is_integer() const noexcept
 			{
 				return std::holds_alternative<int64_t>(_value);
 			}
@@ -304,7 +304,7 @@ namespace luco
 			 * @brief checks if luco::value is holding luco boolean (bool)
 			 * @return true if it does
 			 */
-			bool is_boolean() const noexcept
+			inline bool is_boolean() const noexcept
 			{
 				return std::holds_alternative<bool>(_value);
 			}
@@ -313,7 +313,7 @@ namespace luco
 			 * @brief checks if luco::value is holding luco null (luco::null_type)
 			 * @return true if it does
 			 */
-			bool is_null() const noexcept
+			inline bool is_null() const noexcept
 			{
 				return std::holds_alternative<null_type>(_value);
 			}
@@ -322,7 +322,7 @@ namespace luco
 			 * @brief checks if luco::value is not holding luco value (luco::monostate)
 			 * @return true if it does
 			 */
-			bool is_empty() const noexcept
+			inline bool is_empty() const noexcept
 			{
 				return std::holds_alternative<monostate>(_value);
 			}
@@ -345,7 +345,7 @@ namespace luco
 			 * @return std::string or luco::error if it doesn't hold a string
 			 * @see as_string()
 			 */
-			expected<std::string, error> try_as_string() noexcept
+			inline expected<std::string, error> try_as_string() noexcept
 			{
 				if (not this->is_string())
 				{
@@ -362,7 +362,7 @@ namespace luco
 			 * @return double or luco::error if it doesn't hold a number
 			 * @see as_number()
 			 */
-			expected<double, error> try_as_number() noexcept
+			inline expected<double, error> try_as_number() noexcept
 			{
 				if (not this->is_number())
 				{
@@ -386,7 +386,7 @@ namespace luco
 			 * @return int64_t or luco::error if it doesn't hold a number
 			 * @see as_integer()
 			 */
-			expected<int64_t, error> try_as_integer() noexcept
+			inline expected<int64_t, error> try_as_integer() noexcept
 			{
 				if (not this->is_integer())
 				{
@@ -403,7 +403,7 @@ namespace luco
 			 * @return double or luco::error if it doesn't hold a number
 			 * @see as_double()
 			 */
-			expected<double, error> try_as_double() noexcept
+			inline expected<double, error> try_as_double() noexcept
 			{
 				if (not this->is_double())
 				{
@@ -420,7 +420,7 @@ namespace luco
 			 * @return bool or luco::error if it doesn't hold a boolean
 			 * @see as_boolean()
 			 */
-			expected<bool, error> try_as_boolean() noexcept
+			inline expected<bool, error> try_as_boolean() noexcept
 			{
 				if (not this->is_boolean())
 				{
@@ -437,7 +437,7 @@ namespace luco
 			 * @return luco::null_type or luco::error if it doesn't hold a null
 			 * @see as_null()
 			 */
-			expected<null_type, error> try_as_null() noexcept
+			inline expected<null_type, error> try_as_null() noexcept
 			{
 				if (not this->is_null())
 				{
@@ -455,7 +455,7 @@ namespace luco
 			 * @return luco string
 			 * @see try_as_string()
 			 */
-			std::string as_string()
+			inline std::string as_string()
 			{
 				auto ok = this->try_as_string();
 				if (not ok)
@@ -472,7 +472,7 @@ namespace luco
 			 * @return luco number
 			 * @see try_as_number()
 			 */
-			double as_number()
+			inline double as_number()
 			{
 				auto ok = this->try_as_number();
 				if (not ok)
@@ -489,7 +489,7 @@ namespace luco
 			 * @return luco number
 			 * @see try_as_integer()
 			 */
-			int64_t as_integer()
+			inline int64_t as_integer()
 			{
 				auto ok = this->try_as_integer();
 				if (not ok)
@@ -506,7 +506,7 @@ namespace luco
 			 * @return luco number
 			 * @see try_as_double()
 			 */
-			double as_double()
+			inline double as_double()
 			{
 				auto ok = this->try_as_double();
 				if (not ok)
@@ -523,7 +523,7 @@ namespace luco
 			 * @return luco boolean
 			 * @see try_as_boolean()
 			 */
-			bool as_boolean()
+			inline bool as_boolean()
 			{
 				auto ok = this->try_as_boolean();
 				if (not ok)
@@ -540,7 +540,7 @@ namespace luco
 			 * @return luco null
 			 * @see try_as_null()
 			 */
-			null_type as_null()
+			inline null_type as_null()
 			{
 				auto ok = this->try_as_null();
 				if (not ok)
@@ -555,7 +555,7 @@ namespace luco
 			 * @brief cast the luco value into a std::string
 			 * @return string representation of the value
 			 */
-			std::string stringify() const noexcept
+			inline std::string stringify() const noexcept
 			{
 				if (this->is_double())
 				{
@@ -626,7 +626,7 @@ namespace luco
 			 * @brief gets string representation of luco::value_type of the internal value
 			 * @return string name of the value_type
 			 */
-			std::string type_name() const noexcept
+			inline std::string type_name() const noexcept
 			{
 				if (this->is_string())
 				{
@@ -678,7 +678,7 @@ namespace luco
 			luco_node _node;
 
 		protected:
-			void handle_std_any(const std::any& any_value, std::function<void(std::any)> insert_func);
+			inline void handle_std_any(const std::any& any_value, std::function<void(std::any)> insert_func);
 
 			template<typename is_allowed_node_type>
 			constexpr std::variant<class value, luco::node> static handle_allowed_node_types(
@@ -688,54 +688,54 @@ namespace luco
 			constexpr void setting_allowed_node_type(const container_or_node_type& node_value) noexcept;
 
 			template<is_allowed_value_type T>
-			expected<T, error> access_value(std::function<expected<T, error>(std::shared_ptr<class value>)> fun) const;
+			inline expected<T, error> access_value(std::function<expected<T, error>(std::shared_ptr<class value>)> fun) const;
 
 		public:
 			/**
 			 * @brief default constructor which creates luco::node with type luco::node_type::object
 			 */
-			explicit node();
-			explicit node(const luco_node& n);
+			inline explicit node();
+			inline explicit node(const luco_node& n);
 
 			/**
 			 * @brief constructor to allow setting the type of the luco::node
 			 * @param type type of node from enum luco::node_type
 			 */
-			explicit node(enum node_type type);
+			inline explicit node(enum node_type type);
 
 			template<typename container_or_node_type>
-			explicit node(const container_or_node_type& container) noexcept;
+			inline explicit node(const container_or_node_type& container) noexcept;
 
-			node(const std::initializer_list<std::pair<std::string, std::any>>& pairs);
-			node(const std::initializer_list<std::any>& val);
-
-			template<typename container_or_node_type>
-			expected<std::reference_wrapper<luco::node>, error> insert(const std::string&		 key,
-										   const container_or_node_type& node);
+			inline node(const std::initializer_list<std::pair<std::string, std::any>>& pairs);
+			inline node(const std::initializer_list<std::any>& val);
 
 			template<typename container_or_node_type>
-			expected<std::reference_wrapper<luco::node>, error>	  push_back(const container_or_node_type& node);
+			inline expected<std::reference_wrapper<luco::node>, error> insert(const std::string&		key,
+											  const container_or_node_type& node);
+
+			template<typename container_or_node_type>
+			inline expected<std::reference_wrapper<luco::node>, error> push_back(const container_or_node_type& node);
 
 			/**
 			 * @brief access the luco::value the luco::node is holding, if it exists
 			 * @return luco::value or luco::error if it doesn't hold a luco::value
 			 * @see as_value()
 			 */
-			expected<std::shared_ptr<class value>, error>		  try_as_value() const noexcept;
+			inline expected<std::shared_ptr<class value>, error>	   try_as_value() const noexcept;
 
 			/**
 			 * @brief access the luco::array the luco::node is holding, if it exists
 			 * @return luco::array or luco::error if it doesn't hold a luco::array
 			 * @see as_array()
 			 */
-			expected<std::shared_ptr<luco::array>, error>		  try_as_array() const noexcept;
+			inline expected<std::shared_ptr<luco::array>, error>	   try_as_array() const noexcept;
 
 			/**
 			 * @brief access the luco::object the luco::node is holding, if it exists
 			 * @return luco::object or luco::error if it doesn't hold a luco::object
 			 * @see as_object()
 			 */
-			expected<std::shared_ptr<luco::object>, error>		  try_as_object() const noexcept;
+			inline expected<std::shared_ptr<luco::object>, error>	   try_as_object() const noexcept;
 
 			/**
 			 * @brief access the luco::value the luco::node is holding, if it exists
@@ -743,7 +743,7 @@ namespace luco
 			 * @return std::shared_ptr<luco::value>
 			 * @see try_as_value()
 			 */
-			std::shared_ptr<class value>				  as_value() const;
+			inline std::shared_ptr<class value>			   as_value() const;
 
 			/**
 			 * @brief access the luco::array the luco::node is holding, if it exists
@@ -751,7 +751,7 @@ namespace luco
 			 * @return std::shared_ptr<luco::array>
 			 * @see try_as_array()
 			 */
-			std::shared_ptr<luco::array>				  as_array() const;
+			inline std::shared_ptr<luco::array>			   as_array() const;
 
 			/**
 			 * @brief access the luco::object the luco::node is holding, if it exists
@@ -759,7 +759,7 @@ namespace luco
 			 * @return std::shared_ptr<luco::object>
 			 * @see try_as_object()
 			 */
-			std::shared_ptr<luco::object>				  as_object() const;
+			inline std::shared_ptr<luco::object>			   as_object() const;
 
 			/**
 			 * @brief cast a node into a std::string if it is holding luco::value that is a luco string (std::string)
@@ -779,35 +779,35 @@ namespace luco
 			 * @return std::string or luco::error if it doesn't hold a string
 			 * @see as_string()
 			 */
-			expected<std::string, error>				  try_as_string() const noexcept;
+			inline expected<std::string, error>			   try_as_string() const noexcept;
 
 			/**
 			 * @brief cast a node into a int64_t if it is holding luco::value that is a luco number (int64_t)
 			 * @return int64_t or luco::error if it doesn't hold a string
 			 * @see as_integer()
 			 */
-			expected<int64_t, error>				  try_as_integer() const noexcept;
+			inline expected<int64_t, error>				   try_as_integer() const noexcept;
 
 			/**
 			 * @brief cast a node into a double if it is holding luco::value that is a luco number (double)
 			 * @return double or luco::error if it doesn't hold a string
 			 * @see as_double()
 			 */
-			expected<double, error>					  try_as_double() const noexcept;
+			inline expected<double, error>				   try_as_double() const noexcept;
 
 			/**
 			 * @brief cast a node into a double if it is holding luco::value that is a luco number (double or int64_t)
 			 * @return double or luco::error if it doesn't hold a string
 			 * @see as_number()
 			 */
-			expected<double, error>					  try_as_number() const noexcept;
+			inline expected<double, error>				   try_as_number() const noexcept;
 
 			/**
 			 * @brief cast a node into a bool if it is holding luco::value that is a luco boolean (bool)
 			 * @return bool or luco::error if it doesn't hold a string
 			 * @see as_boolean()
 			 */
-			expected<bool, error>					  try_as_boolean() const noexcept;
+			inline expected<bool, error>				   try_as_boolean() const noexcept;
 
 			/**
 			 * @brief cast a node into a luco::null_type if it is holding luco::value that is a luco null
@@ -827,7 +827,7 @@ namespace luco
 			 * @return luco::null_type or luco::error if it doesn't hold a null (luco::null_type)
 			 * @see as_null()
 			 */
-			expected<null_type, error>				  try_as_null() const noexcept;
+			inline expected<null_type, error>			   try_as_null() const noexcept;
 
 			/**
 			 * @brief cast a node into a string if it is holding luco::value that is a luco string (luco::null_type)
@@ -835,7 +835,7 @@ namespace luco
 			 * @return luco string
 			 * @see try_as_string()
 			 */
-			std::string						  as_string() const;
+			inline std::string					   as_string() const;
 
 			/**
 			 * @brief cast a node into a int64_t if it is holding luco::value that is a luco number (int64_t)
@@ -843,7 +843,7 @@ namespace luco
 			 * @return luco number
 			 * @see try_as_integer()
 			 */
-			int64_t							  as_integer() const;
+			inline int64_t						   as_integer() const;
 
 			/**
 			 * @brief cast a node into a double if it is holding luco::value that is a luco number (double)
@@ -851,7 +851,7 @@ namespace luco
 			 * @return luco number
 			 * @see try_as_double()
 			 */
-			double							  as_double() const;
+			inline double						   as_double() const;
 
 			/**
 			 * @brief cast a node into a double if it is holding luco::value that is a luco number (int64_t or double)
@@ -859,7 +859,7 @@ namespace luco
 			 * @return luco number
 			 * @see try_as_number()
 			 */
-			double							  as_number() const;
+			inline double						   as_number() const;
 
 			/**
 			 * @brief cast a node into a bool if it is holding luco::value that is a luco boolean (bool)
@@ -867,7 +867,7 @@ namespace luco
 			 * @return luco boolean
 			 * @see try_as_boolean()
 			 */
-			bool							  as_boolean() const;
+			inline bool						   as_boolean() const;
 
 			/**
 			 * @brief cast a node into a luco::null_type if it is holding luco::value that is a luco null (luco::null_type)
@@ -875,7 +875,7 @@ namespace luco
 			 * @return luco null
 			 * @see try_as_null()
 			 */
-			null_type						  as_null() const;
+			inline null_type					   as_null() const;
 
 			/**
 			 * @brief checks if luco::node is holding luco::value
@@ -888,79 +888,79 @@ namespace luco
 			 * }
 			 * @ecpp
 			 */
-			bool							  is_value() const noexcept;
+			inline bool						   is_value() const noexcept;
 
 			/**
 			 * @brief checks if luco::node is holding luco::array
 			 * @return true if it does
 			 */
-			bool							  is_array() const noexcept;
+			inline bool						   is_array() const noexcept;
 
 			/**
 			 * @brief checks if luco::node is holding luco::object
 			 * @return true if it does
 			 */
-			bool							  is_object() const noexcept;
+			inline bool						   is_object() const noexcept;
 
 			/**
 			 * @brief checks if luco::node is holding luco::value that is holding luco string (std::string)
 			 * @return true if it does
 			 */
-			bool							  is_string() const noexcept;
+			inline bool						   is_string() const noexcept;
 
 			/**
 			 * @brief checks if luco::node is holding luco::value that is holding luco number (int64_t)
 			 * @return true if it does
 			 */
-			bool							  is_integer() const noexcept;
+			inline bool						   is_integer() const noexcept;
 
 			/**
 			 * @brief checks if luco::node is holding luco::value that is holding luco number (double)
 			 * @return true if it does
 			 */
-			bool							  is_double() const noexcept;
+			inline bool						   is_double() const noexcept;
 
 			/**
 			 * @brief checks if luco::node is holding luco::value that is holding luco number (double or int64_t)
 			 * @return true if it does
 			 */
-			bool							  is_number() const noexcept;
+			inline bool						   is_number() const noexcept;
 
 			/**
 			 * @brief checks if luco::node is holding luco::value that is holding luco boolean (bool)
 			 * @return true if it does
 			 */
-			bool							  is_boolean() const noexcept;
+			inline bool						   is_boolean() const noexcept;
 
 			/**
 			 * @brief checks if luco::node is holding luco::value that is holding luco null (luco::null_type)
 			 * @return true if it does
 			 */
-			bool							  is_null() const noexcept;
+			inline bool						   is_null() const noexcept;
 
 			/**
 			 * @brief gets the luco::node_type of the internal node
 			 * @return node_type
 			 */
-			node_type						  type() const noexcept;
+			inline node_type					   type() const noexcept;
 
 			/**
 			 * @brief gets string representation of luco::node_type of the internal node
 			 * @return string name of the node_type
 			 */
-			std::string						  type_name() const noexcept;
+			inline std::string					   type_name() const noexcept;
 
 			/**
 			 * @brief gets the luco::value_type of the node if it's holding luco::value. otherwise it returns value_type::none
 			 * @return value_type
 			 */
-			value_type						  valuetype() const noexcept;
+			inline value_type					   valuetype() const noexcept;
 
 			/**
 			 * @brief gets string representation of luco::value_type of the internal node if it's holding luco::value
 			 * @return string name of the value_type
 			 */
-			std::string						  value_type_name() const noexcept;
+			inline std::string					   value_type_name() const noexcept;
 
 			/**
 			 * @brief stringify the luco (object, array or value) inside the luco::node
@@ -982,14 +982,14 @@ namespace luco
 			 * @eluco
 			 * @return serialized luco
 			 */
-			std::string						  stringify() const noexcept;
+			inline std::string					   stringify() const noexcept;
 
 			/**
 			 * @brief checks if a key exists in a luco object
 			 * @param key key to lookup
 			 * @return true if it does
 			 */
-			bool							  contains(const std::string& key) const noexcept;
+			inline bool						   contains(const std::string& key) const noexcept;
 
 			/**
 			 * @brief access the node at the specified object key
@@ -997,7 +997,7 @@ namespace luco
 			 * @return luco::node& at the specified key
 			 * @see try_at()
 			 */
-			class node&						  at(const std::string& object_key) const;
+			inline class node&					   at(const std::string& object_key) const;
 
 			/**
 			 * @brief access the node at the specified array index
@@ -1005,7 +1005,7 @@ namespace luco
 			 * @return luco::node& at the specified index
 			 * @see try_at()
 			 */
-			class node&						  at(const size_t array_index) const;
+			inline class node&					   at(const size_t array_index) const;
 
 			/**
 			 * @brief access the node at the specified object key
@@ -1031,7 +1031,8 @@ namespace luco
 			 * @return either std::reference_wrapper<luco::node> if the node was found or luco::error if not
 			 * @see at()
 			 */
-			expected<std::reference_wrapper<luco::node>, luco::error> try_at(const std::string& object_key) const noexcept;
+			inline expected<std::reference_wrapper<luco::node>, luco::error>
+			try_at(const std::string& object_key) const noexcept;
 
 			/**
 			 * @brief access the node at the specified array index
@@ -1057,14 +1058,14 @@ namespace luco
 			 * @return either std::reference_wrapper<luco::node> if the node was found or luco::error if not
 			 * @see at()
 			 */
-			expected<std::reference_wrapper<luco::node>, luco::error> try_at(const size_t array_index) const noexcept;
+			inline expected<std::reference_wrapper<luco::node>, luco::error> try_at(const size_t array_index) const noexcept;
 
 			/**
 			 * @brief set a node with a container_or_node_type
 			 * @param node_value value to be set
 			 */
 			template<typename container_or_node_type>
-			void set(const container_or_node_type& node_value) noexcept;
+			inline void set(const container_or_node_type& node_value) noexcept;
 
 			/**
 			 * @brief asign a node with a container_or_node_type
@@ -1072,10 +1073,10 @@ namespace luco
 			 * @return the address of the node which can be used to modify the value
 			 */
 			template<typename container_or_node_type>
-			class node&			  operator=(const container_or_node_type& node_value) noexcept;
+			inline class node& operator=(const container_or_node_type& node_value) noexcept;
 
-			class node&			  operator+=(const std::initializer_list<std::pair<std::string, std::any>>& pairs);
-			class node&			  operator+=(const std::initializer_list<std::any>& val);
+			inline class node& operator+=(const std::initializer_list<std::pair<std::string, std::any>>& pairs);
+			inline class node& operator+=(const std::initializer_list<std::any>& val);
 
 			/**
 			 * @brief add two luco::node together. they must have the same type and be either object, array, string or number
@@ -1096,37 +1097,37 @@ namespace luco
 			 * @throw luco::error if different types or not one of the required types
 			 * @return new node containing content of both nodes
 			 */
-			class node			  operator+(const node& other_node);
+			inline class node  operator+(const node& other_node);
 
-			void				  dump_to_json(const std::function<void(std::string)> out_func = __print,
-								       const std::pair<char, size_t>& indent_conf = {' ', 4}, size_t indent = 0) const;
+			inline void	   dump_to_json(const std::function<void(std::string)> out_func = __print,
+							const std::pair<char, size_t>& indent_conf = {' ', 4}, size_t indent = 0) const;
 
-			void				  dump_to_luco(const std::function<void(std::string)> out_func = __print,
-								       const std::pair<char, size_t>& indent_conf = {' ', 4}, size_t indent = 0) const;
+			inline void	   dump_to_luco(const std::function<void(std::string)> out_func = __print,
+							const std::pair<char, size_t>& indent_conf = {' ', 4}, size_t indent = 0) const;
 
 			/**
 			 * @brief write luco::node to stdout
 			 * @param indent_conf indentation config for writing {char, size}
 			 */
-			void				  dump_to_stdout(const std::pair<char, size_t>& indent_conf = {' ', 4}) const;
+			inline void	   dump_to_stdout(const std::pair<char, size_t>& indent_conf = {' ', 4}) const;
 
 			/**
 			 * @brief write luco::node to string
 			 * @param indent_conf indentation config for writing {char, size}
 			 * @return luco serialized
 			 */
-			std::string			  dump_to_string(const std::pair<char, size_t>& indent_conf = {' ', 4}) const;
+			inline std::string dump_to_string(const std::pair<char, size_t>& indent_conf = {' ', 4}) const;
 
 			/**
 			 * @brief write luco::node to a file
 			 * @param path path to write to
 			 * @param indent_conf indentation config for writing {char, size}
 			 */
-			expected<monostate, error>	  dump_to_file(const std::filesystem::path&   path,
-								       const std::pair<char, size_t>& indent_conf = {' ', 4}) const;
+			inline expected<monostate, error>	 dump_to_file(const std::filesystem::path&   path,
+									      const std::pair<char, size_t>& indent_conf = {' ', 4}) const;
 
-			expected<class luco::node, error> add_value_to_array(const size_t index, const class value& value);
-			expected<class luco::node, error> add_node_to_array(const size_t index, const luco::node& node);
+			inline expected<class luco::node, error> add_value_to_array(const size_t index, const class value& value);
+			inline expected<class luco::node, error> add_node_to_array(const size_t index, const luco::node& node);
 	};
 	using luco_object = std::map<std::string, class node>;
 
